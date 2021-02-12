@@ -1,5 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto" android:id="@+id/main_navigation">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main_navigation"
+    app:startDestination="@id/navigation_home">
 
+    <fragment
+        android:id="@+id/navigation_home"
+        android:name="com.example.graduationtaskplot.fragment.HomeFragment"
+        android:label="home_fragment"
+        tools:layout="@layout/home_fragment" >
+        <action
+            android:id="@+id/action_navigation_home_to_countActivity"
+            app:destination="@id/countActivity" />
+    </fragment>
+    <fragment
+        android:id="@+id/navigation_data"
+        android:name="com.example.graduationtaskplot.fragment.DataFragment"
+        android:label="data_fragment"
+        tools:layout="@layout/data_fragment" />
+    <fragment
+        android:id="@+id/navigation_fix"
+        android:name="com.example.graduationtaskplot.fragment.FixFragment"
+        android:label="fix_fragment"
+        tools:layout="@layout/fix_fragment" />
+    <activity
+        android:id="@+id/countActivity"
+        android:name="com.example.graduationtaskplot.CountActivity"
+        android:label="activity_count"
+        tools:layout="@layout/activity_count" />
 </navigation>

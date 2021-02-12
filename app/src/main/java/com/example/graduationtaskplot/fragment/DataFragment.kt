@@ -1,4 +1,4 @@
-package com.example.graduationtaskplot.fragment.fragment
+package com.example.graduationtaskplot.fragment
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -20,9 +20,8 @@ class DataFragment : Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
-        // ボタンの非表示
-        activity?.findViewById<FloatingActionButton>(R.id.count_button)?.apply {
-            visibility = View.INVISIBLE
-        }
+        // カウントボタン非表示
+        var button: FloatingActionButton? = activity?.findViewById(R.id.count_button)
+        button?.visibility = View.INVISIBLE
     }
 }

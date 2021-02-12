@@ -1,3 +1,14 @@
 <resources>
-    <string name="app_name">GraduationTaskPLOT</string>
+    <string name="app_name">スクワット</string>
+
+    <string name="text_home">ホーム</string>
+    <string name="text_data">統計</string>
+    <string name="text_fix">修正</string>
+
+    <string name="text_count">0</string>
+    <string name="text_start">START</string>
+    <string name="text_stop">STOP</string>
+    <string name="text_save">保存</string>
+
+    <string name="text_date">2020-01-01</string>
 </resources>
