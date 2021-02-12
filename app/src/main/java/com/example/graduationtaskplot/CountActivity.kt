@@ -2,11 +2,10 @@ package com.example.graduationtaskplot
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import com.example.graduationtaskplot.R
 
-class MainActivity : AppCompatActivity() {
+class CountActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        setContentView(R.layout.activity_count)
     }
 }
