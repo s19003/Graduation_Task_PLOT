@@ -9,4 +9,5 @@ open class RealmData : RealmObject() {
     var id: Int = 0
     var count: Int = 0
     var date: Date = Date()
+    var day: String = ""
 }

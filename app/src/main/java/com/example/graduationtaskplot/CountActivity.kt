@@ -13,6 +13,8 @@ import com.example.graduationtaskplot.realm.RealmData
 import io.realm.Realm
 import io.realm.kotlin.createObject
 import io.realm.kotlin.where
+import java.text.DateFormat
+import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.random.Random
 
@@ -29,6 +31,7 @@ class CountActivity : AppCompatActivity(), SensorEventListener {
     private var count = 0
     private var up = true
     private var startButton = false
+    private var date = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -40,6 +43,21 @@ class CountActivity : AppCompatActivity(), SensorEventListener {
         // センサー
         sensorManager = getSystemService(Context.SENSOR_SERVICE) as SensorManager
         sensor = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER)
+
+        // 現在時刻を取得する
+        val current = SimpleDateFormat("yy-MM-dd")
+        date = current.format(Date())
+
+        // Intentから時刻を取得する
+        val day = intent.getStringExtra("day")
+
+        if (day.equals(date)) {
+            val realmData = realm.where<RealmData>().equalTo("day", day).findFirst()
+            val text = findViewById<TextView>(R.id.count_text).apply {
+                text = realmData!!.count.toString()
+                count = text.toString().toInt()
+            }
+        }
 
         // スタートボタンのON/OFF
         findViewById<Button>(R.id.start_button).setOnClickListener {
@@ -62,6 +80,7 @@ class CountActivity : AppCompatActivity(), SensorEventListener {
 
                 realmData.count = Random.nextInt(0, 50)
                 realmData.date = Date()
+                realmData.day = date
             }
             finish()
         }

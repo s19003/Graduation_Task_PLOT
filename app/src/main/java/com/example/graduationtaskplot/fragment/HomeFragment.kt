@@ -37,51 +37,5 @@ class HomeFragment : Fragment() {
         var button: FloatingActionButton? = activity?.findViewById(R.id.count_button)
         button?.visibility = View.VISIBLE
 
-        // グラフの処理
-        val xLine = mutableListOf<Date>()
-
-        val realmResults = realm.where(RealmData::class.java).findAll().sort("date")
-        for (i in realmResults.indices) {
-            xLine.add(realmResults[i]!!.date)
-        }
-
-        println(xLine)
-
-        val yLine = mutableListOf<Float>()
-
-        for (i in realmResults.indices) {
-            yLine.add(realmResults[i]!!.count.toFloat())
-        }
-
-//        // Entry
-//        var entryList = mutableListOf<BarEntry>()
-//        for (i in xLine.indices) {
-//            entryList.add(
-//                BarEntry(xLine[i], yLine[i])
-//            )
-//        }
-//
-//        println(entryList)
-
-//        // BarDataSetのリスト
-//        val barDataSets = mutableListOf<IBarDataSet>()
-//        // BarDataにデータ格納
-//        val barDataSet = BarDataSet(entryList, "test")
-//        barDataSet.color = Color.BLUE
-//        // リストに格納
-//        barDataSets.add(barDataSet)
-//
-//        // BarDataにBarDataSet格納
-//        val barData = BarData(barDataSets)
-//        // BarChartにBarData格納
-//        val barChart = activity?.findViewById<BarChart>(R.id.barChart)
-//        barChart?.data = barData
-//        barChart?.xAxis?.apply {
-//            isEnabled = true
-//            textColor = Color.BLACK
-//        }
-//
-//        barChart?.notifyDataSetChanged()
-//        barChart?.invalidate()
     }
 }
