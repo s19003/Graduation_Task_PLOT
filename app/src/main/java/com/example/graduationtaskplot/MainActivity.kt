@@ -51,6 +51,7 @@ class MainActivity : AppCompatActivity() {
             } else {
                 "0"
             }
+
             intent.putExtra("day", day)
 
             startActivity(intent)

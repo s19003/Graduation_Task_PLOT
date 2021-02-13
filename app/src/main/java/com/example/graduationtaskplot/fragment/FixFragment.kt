@@ -53,4 +53,9 @@ class FixFragment : Fragment() {
         adapter = ViewAdapter(realmResults)
         recyclerView?.adapter = this.adapter
     }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        realm.close()
+    }
 }

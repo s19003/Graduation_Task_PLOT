@@ -4,11 +4,13 @@
     <string name="text_home">ホーム</string>
     <string name="text_data">統計</string>
     <string name="text_fix">修正</string>
+    <string name="text_title">デイリースクワット</string>
+    <string name="text_counting">スクワット中</string>
 
     <string name="text_count">0</string>
     <string name="text_start">START</string>
     <string name="text_stop">STOP</string>
     <string name="text_save">保存</string>
 
-    <string name="text_date">2020-01-01</string>
+    <string name="text_date">2020-01-01 00:00:00</string>
 </resources>

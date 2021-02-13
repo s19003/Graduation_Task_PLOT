@@ -11,7 +11,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.GraduationTaskPLOT">
 
-        <activity android:name=".CountActivity" />
+        <activity
+            android:name=".CountActivity"
+            android:label="@string/text_counting" />
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

@@ -11,6 +11,7 @@ import android.widget.Button
 import android.widget.TextView
 import com.example.graduationtaskplot.realm.RealmData
 import io.realm.Realm
+import io.realm.Sort
 import io.realm.kotlin.createObject
 import io.realm.kotlin.where
 import java.text.DateFormat
@@ -51,9 +52,11 @@ class CountActivity : AppCompatActivity(), SensorEventListener {
         // Intentから時刻を取得する
         val day = intent.getStringExtra("day")
 
+        // 既に今日のカウントがあるのであれば、そのカウントを格納する
         if (day.equals(date)) {
-            val realmData = realm.where<RealmData>().equalTo("day", day).findFirst()
-            val text = findViewById<TextView>(R.id.count_text).apply {
+            val realmData = realm.where<RealmData>()
+                .equalTo("day", day).sort("date", Sort.DESCENDING).findFirst()
+            findViewById<TextView>(R.id.count_text).apply {
                 text = realmData!!.count.toString()
                 count = text.toString().toInt()
             }
@@ -73,14 +76,26 @@ class CountActivity : AppCompatActivity(), SensorEventListener {
 
         // 保存
         findViewById<Button>(R.id.save_button).setOnClickListener {
-            realm.executeTransaction {
-                val maxId = realm.where<RealmData>().max("id")
-                val nextId = (maxId?.toInt() ?: 0) + 1
-                val realmData = realm.createObject<RealmData>(nextId)
+            when (count) {
+                0 -> {
+                    realm.executeTransaction {
+                        val maxId = realm.where<RealmData>().max("id")
+                        val nextId = (maxId?.toInt() ?: 0) + 1
+                        val realmData = realm.createObject<RealmData>(nextId)
 
-                realmData.count = Random.nextInt(0, 50)
-                realmData.date = Date()
-                realmData.day = date
+                        realmData.count = count
+                        realmData.date = Date()
+                        realmData.day = date
+                    }
+                }
+                else -> {
+                    realm.executeTransaction {
+                        val realmData = realm.where<RealmData>()
+                            .equalTo("day", day).sort("date", Sort.DESCENDING).findFirst()
+                        realmData?.count = count
+                        realmData?.date = Date()
+                    }
+                }
             }
             finish()
         }
