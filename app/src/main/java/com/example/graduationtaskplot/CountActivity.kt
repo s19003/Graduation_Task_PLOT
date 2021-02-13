@@ -33,6 +33,7 @@ class CountActivity : AppCompatActivity(), SensorEventListener {
     private var up = true
     private var startButton = false
     private var date = ""
+    private var today = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -60,6 +61,7 @@ class CountActivity : AppCompatActivity(), SensorEventListener {
                 text = realmData!!.count.toString()
                 count = text.toString().toInt()
             }
+            today = true
         }
 
         // スタートボタンのON/OFF
@@ -74,10 +76,18 @@ class CountActivity : AppCompatActivity(), SensorEventListener {
             }
         }
 
-        // 保存
+        // カウントを保存する
         findViewById<Button>(R.id.save_button).setOnClickListener {
-            when (count) {
-                0 -> {
+            when {
+                today -> {
+                    realm.executeTransaction {
+                        val realmData = realm.where<RealmData>()
+                            .equalTo("day", day).sort("date", Sort.DESCENDING).findFirst()
+                        realmData?.count = count
+                        realmData?.date = Date()
+                    }
+                }
+                !today -> {
                     realm.executeTransaction {
                         val maxId = realm.where<RealmData>().max("id")
                         val nextId = (maxId?.toInt() ?: 0) + 1
@@ -86,14 +96,6 @@ class CountActivity : AppCompatActivity(), SensorEventListener {
                         realmData.count = count
                         realmData.date = Date()
                         realmData.day = date
-                    }
-                }
-                else -> {
-                    realm.executeTransaction {
-                        val realmData = realm.where<RealmData>()
-                            .equalTo("day", day).sort("date", Sort.DESCENDING).findFirst()
-                        realmData?.count = count
-                        realmData?.date = Date()
                     }
                 }
             }

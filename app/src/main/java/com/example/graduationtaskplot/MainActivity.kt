@@ -16,14 +16,17 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 class MainActivity : AppCompatActivity() {
-    // Realm
+    // Realmデータベース
     private lateinit var realm: Realm
+
+    // その他
+    private var day: String? = "0"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        // ナビゲーション
+        // ボトムナビゲーションの設定
         val navView: BottomNavigationView = findViewById(R.id.bottom_nav_view)
         val navController = findNavController(R.id.nav_host_fragment)
         val appBarConfiguration =
@@ -37,23 +40,23 @@ class MainActivity : AppCompatActivity() {
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
 
-        // Realm
+        // Realmデータベース
         realm = Realm.getDefaultInstance()
 
-        // カウントボタン
         findViewById<FloatingActionButton>(R.id.count_button)?.setOnClickListener {
             val intent = Intent(this, CountActivity::class.java)
 
-            // 比較用の時刻を送る
-            var day = if (!realm.isEmpty) {
-                realm.where(RealmData::class.java).findAll()
-                    .sort("date", Sort.DESCENDING).first()?.day
+            // 比較用の時刻を取得
+            day = if (!realm.isEmpty) {
+                realm.where(RealmData::class.java).sort("date", Sort.DESCENDING).findFirst()?.day
             } else {
                 "0"
             }
+            println("------------------------------------------------------------------------------------------------------------------")
+            println(realm.where(RealmData::class.java).findAll())
+            println(day)
 
             intent.putExtra("day", day)
-
             startActivity(intent)
         }
     }

@@ -7,12 +7,37 @@
     tools:context=".fragment.HomeFragment">
 
     <com.github.mikephil.charting.charts.BarChart
-        android:id="@+id/barChart"
+        android:id="@+id/bar_chart"
         android:layout_width="0dp"
         android:layout_height="300dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/text_today"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="70dp"
+        android:layout_marginLeft="70dp"
+        android:text="@string/text_today"
+        android:textAppearance="@style/TextAppearance.AppCompat.Large"
+        app:layout_constraintBottom_toTopOf="@+id/bar_chart"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.454" />
+
+    <TextView
+        android:id="@+id/text_today_count"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="100dp"
+        android:layout_marginLeft="100dp"
+        android:text="@string/text_count"
+        android:textAppearance="@style/TextAppearance.AppCompat.Display1"
+        app:layout_constraintBottom_toBottomOf="@+id/text_today"
+        app:layout_constraintStart_toEndOf="@+id/text_today"
+        app:layout_constraintTop_toTopOf="@+id/text_today" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

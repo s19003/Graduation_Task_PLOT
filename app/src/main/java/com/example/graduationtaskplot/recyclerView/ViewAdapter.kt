@@ -18,8 +18,8 @@ class ViewAdapter(realmResults: RealmResults<RealmData>) : RecyclerView.Adapter<
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val realmData = rResults[position]
-        holder.countText?.text = realmData?.count.toString()
-        holder.dateText?.text = DateFormat.format("yyyy/MM/dd HH:mm:ss", realmData?.date)
+        holder.countText?.text = String.format("${realmData?.count} 回")
+        holder.dateText?.text = DateFormat.format("yyyy/MM/dd", realmData?.date)
     }
 
     override fun getItemCount(): Int {

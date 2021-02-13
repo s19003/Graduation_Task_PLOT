@@ -26,14 +26,13 @@ class FixFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        realm = Realm.getDefaultInstance()
         return inflater.inflate(R.layout.fix_fragment, container, false)
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
-        // カウントボタン非表示
+        // カウントボタンを非表示にする
         var button: FloatingActionButton? = activity?.findViewById(R.id.count_button)
         button?.visibility = View.INVISIBLE
     }
@@ -41,7 +40,10 @@ class FixFragment : Fragment() {
     override fun onStart() {
         super.onStart()
 
-        // RecyclerView
+        // Realmデータベース
+        realm = Realm.getDefaultInstance()
+
+        // RecyclerViewの連携を指定する
         var recyclerView = activity?.findViewById<RecyclerView>(R.id.recyclerView)
 
         val realmResults = realm.where(RealmData::class.java)

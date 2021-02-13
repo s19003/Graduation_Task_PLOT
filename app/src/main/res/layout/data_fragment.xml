@@ -7,12 +7,76 @@
     tools:context=".fragment.DataFragment">
 
     <TextView
-        android:id="@+id/textView3"
+        android:id="@+id/text_sum"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/text_data"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginStart="70dp"
+        android:layout_marginLeft="70dp"
+        android:layout_marginTop="40dp"
+        android:text="@string/text_sum"
+        android:textAppearance="@style/TextAppearance.AppCompat.Display1"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/text_max"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="70dp"
+        android:layout_marginLeft="70dp"
+        android:layout_marginTop="40dp"
+        android:text="@string/text_max"
+        android:textAppearance="@style/TextAppearance.AppCompat.Display1"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/text_sum" />
+
+    <TextView
+        android:id="@+id/text_ave"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="70dp"
+        android:layout_marginLeft="70dp"
+        android:layout_marginTop="40dp"
+        android:text="@string/text_ave"
+        android:textAppearance="@style/TextAppearance.AppCompat.Display1"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/text_max" />
+
+    <TextView
+        android:id="@+id/text_sum_count"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="90dp"
+        android:layout_marginLeft="90dp"
+        android:text="@string/text_count"
+        android:textAppearance="@style/TextAppearance.AppCompat.Display1"
+        app:layout_constraintBottom_toBottomOf="@+id/text_sum"
+        app:layout_constraintStart_toEndOf="@+id/text_sum"
+        app:layout_constraintTop_toTopOf="@+id/text_sum"
+        app:layout_constraintVertical_bias="0.538" />
+
+    <TextView
+        android:id="@+id/text_max_count"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="90dp"
+        android:layout_marginLeft="90dp"
+        android:text="@string/text_count"
+        android:textAppearance="@style/TextAppearance.AppCompat.Display1"
+        app:layout_constraintBottom_toBottomOf="@+id/text_max"
+        app:layout_constraintStart_toEndOf="@+id/text_max"
+        app:layout_constraintTop_toTopOf="@+id/text_max" />
+
+    <TextView
+        android:id="@+id/text_ave_count"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="90dp"
+        android:layout_marginLeft="90dp"
+        android:text="@string/text_count"
+        android:textAppearance="@style/TextAppearance.AppCompat.Display1"
+        app:layout_constraintBottom_toBottomOf="@+id/text_ave"
+        app:layout_constraintStart_toEndOf="@+id/text_ave"
+        app:layout_constraintTop_toTopOf="@+id/text_ave" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
