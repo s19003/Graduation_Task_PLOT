@@ -8,15 +8,17 @@
     <string name="text_counting">スクワット中</string>
 
     <string name="text_count">0</string>
+    <string name="text_count_test">10 回</string>
     <string name="text_start">START</string>
     <string name="text_stop">STOP</string>
     <string name="text_save">保存</string>
 
-    <string name="text_date">2020-01-01 00:00:00</string>
+    <string name="text_date">2020-01-01</string>
 
-    <string name="text_max">最高</string>
+    <string name="text_best">自己ベスト</string>
     <string name="text_ave">平均</string>
     <string name="text_sum">合計</string>
+    <string name="text_size">測定日数</string>
 
     <string name="text_today">今日の回数</string>
 </resources>

@@ -14,10 +14,11 @@ import io.realm.Realm
 import io.realm.Sort
 import io.realm.kotlin.createObject
 import io.realm.kotlin.where
-import java.text.DateFormat
+import java.lang.Math.abs
 import java.text.SimpleDateFormat
 import java.util.*
-import kotlin.random.Random
+import kotlin.math.pow
+import kotlin.math.sqrt
 
 class CountActivity : AppCompatActivity(), SensorEventListener {
     // Realmデータベース
@@ -35,6 +36,38 @@ class CountActivity : AppCompatActivity(), SensorEventListener {
     private var date = ""
     private var today = false
 
+    // テスト用
+    private var x = 0f
+    private var y = 0f
+    private var z = 0f
+    private var xyz = 0f
+    private var xList = mutableListOf<Float>()
+    private var yList = mutableListOf<Float>()
+    private var zList = mutableListOf<Float>()
+    private var xyzList = mutableListOf<Float>()
+    private var xAve = 0f
+    private var yAve = 0f
+    private var zAve = 0f
+    private var xyzAve = 0f
+    private var xMax = 0f
+    private var yMax = 0f
+    private var zMax = 0f
+    private var xyzMax = 0f
+    private var xMinusList = mutableListOf<Float>()
+    private var yMinusList = mutableListOf<Float>()
+    private var zMinusList = mutableListOf<Float>()
+
+    //    private var xyzMinusList = mutableListOf<Float>()
+    private var xMinusAve = 0f
+    private var yMinusAve = 0f
+    private var zMinusAve = 0f
+    private var xyzMinusAve = 0f
+    private var xMinusMax = 0f
+    private var yMinusMax = 0f
+    private var zMinusMax = 0f
+    private var xyzMinusMax = 0f
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_count)
@@ -44,7 +77,7 @@ class CountActivity : AppCompatActivity(), SensorEventListener {
 
         // センサー
         sensorManager = getSystemService(Context.SENSOR_SERVICE) as SensorManager
-        sensor = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER)
+        sensor = sensorManager.getDefaultSensor(Sensor.TYPE_LINEAR_ACCELERATION)
 
         // 現在時刻を取得する
         val current = SimpleDateFormat("yy-MM-dd")
@@ -58,8 +91,9 @@ class CountActivity : AppCompatActivity(), SensorEventListener {
             val realmData = realm.where<RealmData>()
                 .equalTo("day", day).sort("date", Sort.DESCENDING).findFirst()
             findViewById<TextView>(R.id.count_text).apply {
-                text = realmData!!.count.toString()
-                count = text.toString().toInt()
+//                text = realmData!!.count.toString()
+//                count = text.toString().toInt()
+                count = 0
             }
             today = true
         }
@@ -101,25 +135,93 @@ class CountActivity : AppCompatActivity(), SensorEventListener {
             }
             finish()
         }
+
+        findViewById<Button>(R.id.test).setOnClickListener {
+            var builder = StringBuilder()
+
+
+            builder.append("X_AVE = ${xAve} \n")
+            builder.append("Y_AVE = ${yAve} \n")
+            builder.append("Z_AVE = ${zAve} \n")
+            builder.append("XYZ_AVE = ${xyzAve} \n")
+            builder.append("X_MAX = ${xMax} \n")
+            builder.append("Y_MAX = ${yMax} \n")
+            builder.append("Z_MAX = ${zMax} \n")
+            builder.append("XYZ_MAX = ${xyzMax} \n\n")
+
+            builder.append("X_MINUS_AVE = ${xMinusAve} \n")
+            builder.append("Y_MINUS_AVE = ${yMinusAve} \n")
+            builder.append("Z_MINUS_AVE = ${zMinusAve} \n")
+//            builder.append("XYZ_MINUS_AVE = ${xyzMinusAve} \n")
+            builder.append("X_MINUS_MAX = ${xMinusMax} \n")
+            builder.append("Y_MINUS_MAX = ${yMinusMax} \n")
+            builder.append("Z_MINUS_MAX = ${zMinusMax} \n")
+//            builder.append("XYZ_MINUS_MAX = ${xyzMinusMax} \n\n")
+
+            findViewById<TextView>(R.id.count_text).text = builder
+        }
     }
 
     override fun onSensorChanged(event: SensorEvent?) {
-        if (event?.sensor?.type == Sensor.TYPE_ACCELEROMETER) {
+        if (event?.sensor?.type == Sensor.TYPE_LINEAR_ACCELERATION) {
             System.arraycopy(event.values, 0, xyzArray, 0, xyzArray.size)
         }
 
-        var xValue = (xyzArray[0] * 10) / 10
-        var yValue = (xyzArray[1] * 10) / 10
-        var zValue = (xyzArray[2] * 10) / 10
+//        // カウントアルゴリズム
+//        if (startButton) {
+//            if (up) {
+//                if (xValue > 0.85) {
+//                    up = false
+//                }
+//            } else {
+//                if (xValue < -0.85) {
+//                    count++
+//                    up = true
+//                }
+//            }
+//
+//            findViewById<TextView>(R.id.count_text).text = count.toString()
+//        }
 
-        // カウントアルゴリズム
+        x = xyzArray[0]
+        y = xyzArray[1]
+        z = xyzArray[2]
+        xyz = sqrt(x.pow(2) + y.pow(2) + z.pow(2))
+
+        println("x=$x y=$y z=$z xyz=$xyz")
+
         if (startButton) {
+            if (x > 0) xList.add(x) else xMinusList.add(x)
+            if (y > 0) yList.add(y) else yMinusList.add(y)
+            if (z > 0) zList.add(z) else zMinusList.add(z)
+            if (xyz > 0) xyzList.add(xyz)
+
+            xAve = xList.average().toFloat()
+            yAve = yList.average().toFloat()
+            zAve = zList.average().toFloat()
+            xyzAve = xyzList.average().toFloat()
+
+            xMinusAve = xMinusList.average().toFloat()
+            yMinusAve = yMinusList.average().toFloat()
+            zMinusAve = zMinusList.average().toFloat()
+//            xyzMinusAve = xyzMinusList.average().toFloat()
+
+            xMax = xList.maxOrNull() ?: 0f
+            yMax = yList.maxOrNull() ?: 0f
+            zMax = zList.maxOrNull() ?: 0f
+            xyzMax = xyzList.maxOrNull() ?: 0f
+
+            xMinusMax = xMinusList.minOrNull() ?: 0f
+            yMinusMax = yMinusList.minOrNull() ?: 0f
+            zMinusMax = zMinusList.minOrNull() ?: 0f
+//            xyzMinusMax = xyzMinusList.maxOrNull() ?: 0f
+
             if (up) {
-                if (xValue > 0.85) {
+                if (((x > 1.0) || (y > 1.0) || (z > 1.0)) && (xyz > 1.0)) {
                     up = false
                 }
             } else {
-                if (xValue < -0.85) {
+                if (((x < -0.5) || (y < -0.5) || (z < -0.5)) && (xyz > 1.0)) {
                     count++
                     up = true
                 }
@@ -127,6 +229,7 @@ class CountActivity : AppCompatActivity(), SensorEventListener {
 
             findViewById<TextView>(R.id.count_text).text = count.toString()
         }
+        
     }
 
     override fun onAccuracyChanged(sensor: Sensor?, accuracy: Int) {
