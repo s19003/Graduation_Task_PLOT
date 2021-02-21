@@ -1,5 +1,6 @@
 package com.example.graduationtaskplot.fragment
 
+import android.content.res.ColorStateList
 import android.graphics.Color
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -92,7 +93,7 @@ class HomeFragment : Fragment() {
         }
 
         val barDataSet = BarDataSet(entries, "スクワット回数")
-        barDataSet.color = Color.BLUE
+        barDataSet.color = R.color.teal_700
 
         val set = mutableListOf<IBarDataSet>()
         set.add(barDataSet)
@@ -106,7 +107,9 @@ class HomeFragment : Fragment() {
         var day = realm.where(RealmData::class.java).sort("date", Sort.DESCENDING).findFirst()
 
         if (date.equals(day?.day)) {
-            activity?.findViewById<TextView>(R.id.text_today_count)?.text = day?.count.toString()
+            activity?.findViewById<TextView>(R.id.text_today_count)?.apply {
+                text = String.format("${day?.count.toString()} 回")
+            }
         }
     }
 

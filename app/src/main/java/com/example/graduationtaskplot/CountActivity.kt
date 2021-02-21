@@ -26,10 +26,14 @@ class CountActivity : AppCompatActivity(), SensorEventListener {
     private lateinit var realm: Realm
     private lateinit var realmData: RealmQuery<RealmData>
 
-    // センサー
+    // 加速度センサー
     private lateinit var sensorManager: SensorManager
     private var sensor: Sensor? = null
     private var xyzArray = FloatArray(3)
+
+    // 照度センサー
+    private var light: Sensor? = null
+    private var lightValue = 0f
 
     // その他
     private var count: Int = 0
@@ -45,33 +49,33 @@ class CountActivity : AppCompatActivity(), SensorEventListener {
     private var z = 0f
     private var xyz = 0f
 
-    private var xList = mutableListOf<Float>()
-    private var yList = mutableListOf<Float>()
-    private var zList = mutableListOf<Float>()
-    private var xMinusList = mutableListOf<Float>()
-    private var yMinusList = mutableListOf<Float>()
-    private var zMinusList = mutableListOf<Float>()
-    private var xyzList = mutableListOf<Float>()
-
-    private var xAve = 0f
-    private var yAve = 0f
-    private var zAve = 0f
-    private var xMinusAve = 0f
-    private var yMinusAve = 0f
-    private var zMinusAve = 0f
-    private var xyzAve = 0f
-
-    private var xMax = 0f
-    private var yMax = 0f
-    private var zMax = 0f
-    private var xMinusMax = 0f
-    private var yMinusMax = 0f
-    private var zMinusMax = 0f
-    private var xyzMax = 0f
-
-    private var xCount = 0
-    private var yCount = 0
-    private var zCount = 0
+//    private var xList = mutableListOf<Float>()
+//    private var yList = mutableListOf<Float>()
+//    private var zList = mutableListOf<Float>()
+//    private var xMinusList = mutableListOf<Float>()
+//    private var yMinusList = mutableListOf<Float>()
+//    private var zMinusList = mutableListOf<Float>()
+//    private var xyzList = mutableListOf<Float>()
+//
+//    private var xAve = 0f
+//    private var yAve = 0f
+//    private var zAve = 0f
+//    private var xMinusAve = 0f
+//    private var yMinusAve = 0f
+//    private var zMinusAve = 0f
+//    private var xyzAve = 0f
+//
+//    private var xMax = 0f
+//    private var yMax = 0f
+//    private var zMax = 0f
+//    private var xMinusMax = 0f
+//    private var yMinusMax = 0f
+//    private var zMinusMax = 0f
+//    private var xyzMax = 0f
+//
+//    private var xCount = 0
+//    private var yCount = 0
+//    private var zCount = 0
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -82,9 +86,12 @@ class CountActivity : AppCompatActivity(), SensorEventListener {
         realm = Realm.getDefaultInstance()
         realmData = realm.where()
 
-        // センサー
+        // 加速度センサー
         sensorManager = getSystemService(Context.SENSOR_SERVICE) as SensorManager
         sensor = sensorManager.getDefaultSensor(Sensor.TYPE_LINEAR_ACCELERATION)
+
+        // 照度センサー
+        light = sensorManager.getDefaultSensor(Sensor.TYPE_LIGHT)
 
         // Intentから時刻を取得する
         day = intent.getStringExtra("day") ?: ""
@@ -100,10 +107,6 @@ class CountActivity : AppCompatActivity(), SensorEventListener {
             findViewById<TextView>(R.id.count_text).text = this.count.toString()
 
             today = true
-            println("----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- -----")
-            println("日付の比較は出来ています。")
-            println("保存されている最新の日付(day) = $day : 今日の日付(date) = $date")
-            println("count = ${this.count} がセットされます。")
         }
 
         // 計測のON/OFFを行うボタン ON=START OFF=STOP
@@ -174,6 +177,8 @@ class CountActivity : AppCompatActivity(), SensorEventListener {
     override fun onSensorChanged(event: SensorEvent?) {
         if (event?.sensor?.type == Sensor.TYPE_LINEAR_ACCELERATION) {
             System.arraycopy(event.values, 0, xyzArray, 0, xyzArray.size)
+        } else if (event?.sensor?.type == Sensor.TYPE_LIGHT) {
+            lightValue = event.values[0]
         }
 
         x = xyzArray[0]
@@ -182,37 +187,37 @@ class CountActivity : AppCompatActivity(), SensorEventListener {
         xyz = sqrt(x.pow(2) + y.pow(2) + z.pow(2))
 
         if (startButton) {
-            if (x > 0) xList.add(x) else xMinusList.add(x)
-            if (y > 0) yList.add(y) else yMinusList.add(y)
-            if (z > 0) zList.add(z) else zMinusList.add(z)
-            if (xyz > 0) xyzList.add(xyz)
+//            if (x > 0) xList.add(x) else xMinusList.add(x)
+//            if (y > 0) yList.add(y) else yMinusList.add(y)
+//            if (z > 0) zList.add(z) else zMinusList.add(z)
+//            if (xyz > 0) xyzList.add(xyz)
+//
+//            xAve = xList.average().toFloat()
+//            yAve = yList.average().toFloat()
+//            zAve = zList.average().toFloat()
+//            xMinusAve = xMinusList.average().toFloat()
+//            yMinusAve = yMinusList.average().toFloat()
+//            zMinusAve = zMinusList.average().toFloat()
+//            xyzAve = xyzList.average().toFloat()
+//
+//            xMax = xList.maxOrNull() ?: 0f
+//            yMax = yList.maxOrNull() ?: 0f
+//            zMax = zList.maxOrNull() ?: 0f
+//            xMinusMax = xMinusList.minOrNull() ?: 0f
+//            yMinusMax = yMinusList.minOrNull() ?: 0f
+//            zMinusMax = zMinusList.minOrNull() ?: 0f
+//            xyzMax = xyzList.maxOrNull() ?: 0f
 
-            xAve = xList.average().toFloat()
-            yAve = yList.average().toFloat()
-            zAve = zList.average().toFloat()
-            xMinusAve = xMinusList.average().toFloat()
-            yMinusAve = yMinusList.average().toFloat()
-            zMinusAve = zMinusList.average().toFloat()
-            xyzAve = xyzList.average().toFloat()
-
-            xMax = xList.maxOrNull() ?: 0f
-            yMax = yList.maxOrNull() ?: 0f
-            zMax = zList.maxOrNull() ?: 0f
-            xMinusMax = xMinusList.minOrNull() ?: 0f
-            yMinusMax = yMinusList.minOrNull() ?: 0f
-            zMinusMax = zMinusList.minOrNull() ?: 0f
-            xyzMax = xyzList.maxOrNull() ?: 0f
-
-            if (x > 1.5 || x < -1.5) xCount++
-            if (y > 1.5 || y < -1.5) yCount++
-            if (z > 1.5 || z < -1.5) zCount++
+//            if (x > 1.5 || x < -1.5) xCount++
+//            if (y > 1.5 || y < -1.5) yCount++
+//            if (z > 1.5 || z < -1.5) zCount++
 
             if (up) {
-                if ((z > 1.0) && (xyz > 1.5)) {
+                if ((z > 1.0) && (xyz > 1.5) && (lightValue < 30f)) {
                     up = false
                 }
             } else {
-                if ((z < -1.0) && (xyz > 1.5)) {
+                if ((z < -1.0) && (xyz > 1.5) && (lightValue < 30f)) {
                     count++
                     up = true
                 }
@@ -229,6 +234,10 @@ class CountActivity : AppCompatActivity(), SensorEventListener {
     override fun onResume() {
         super.onResume()
         sensor?.also {
+            sensorManager.registerListener(this, it, SensorManager.SENSOR_DELAY_NORMAL)
+        }
+
+        light?.also {
             sensorManager.registerListener(this, it, SensorManager.SENSOR_DELAY_NORMAL)
         }
     }

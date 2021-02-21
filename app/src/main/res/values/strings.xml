@@ -9,16 +9,18 @@
 
     <string name="text_count">0</string>
     <string name="text_count_test">0 回</string>
+    <string name="text_count_string">0 回です</string>
     <string name="text_start">START</string>
     <string name="text_stop">STOP</string>
     <string name="text_save">保存</string>
 
-    <string name="text_date">2020-01-01</string>
+    <string name="text_date">20-01-01</string>
 
     <string name="text_best">自己ベスト</string>
     <string name="text_ave">平均</string>
     <string name="text_sum">合計</string>
     <string name="text_size">測定日数</string>
 
-    <string name="text_today">今日の回数</string>
+    <string name="text_today">今日の回数は</string>
+    <string name="fight">今日もスクワットがんばろー!!</string>
 </resources>
