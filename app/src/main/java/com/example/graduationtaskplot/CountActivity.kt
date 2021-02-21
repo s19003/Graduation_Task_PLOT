@@ -11,6 +11,7 @@ import android.widget.Button
 import android.widget.TextView
 import com.example.graduationtaskplot.realm.RealmData
 import io.realm.Realm
+import io.realm.RealmQuery
 import io.realm.Sort
 import io.realm.kotlin.createObject
 import io.realm.kotlin.where
@@ -23,6 +24,7 @@ import kotlin.math.sqrt
 class CountActivity : AppCompatActivity(), SensorEventListener {
     // Realmデータベース
     private lateinit var realm: Realm
+    private lateinit var realmData: RealmQuery<RealmData>
 
     // センサー
     private lateinit var sensorManager: SensorManager
@@ -30,10 +32,11 @@ class CountActivity : AppCompatActivity(), SensorEventListener {
     private var xyzArray = FloatArray(3)
 
     // その他
-    private var count = 0
+    private var count: Int = 0
+    private var day = ""
+    private var date = ""
     private var up = true
     private var startButton = false
-    private var date = ""
     private var today = false
 
     // テスト用
@@ -41,31 +44,34 @@ class CountActivity : AppCompatActivity(), SensorEventListener {
     private var y = 0f
     private var z = 0f
     private var xyz = 0f
+
     private var xList = mutableListOf<Float>()
     private var yList = mutableListOf<Float>()
     private var zList = mutableListOf<Float>()
-    private var xyzList = mutableListOf<Float>()
-    private var xAve = 0f
-    private var yAve = 0f
-    private var zAve = 0f
-    private var xyzAve = 0f
-    private var xMax = 0f
-    private var yMax = 0f
-    private var zMax = 0f
-    private var xyzMax = 0f
     private var xMinusList = mutableListOf<Float>()
     private var yMinusList = mutableListOf<Float>()
     private var zMinusList = mutableListOf<Float>()
+    private var xyzList = mutableListOf<Float>()
 
-    //    private var xyzMinusList = mutableListOf<Float>()
+    private var xAve = 0f
+    private var yAve = 0f
+    private var zAve = 0f
     private var xMinusAve = 0f
     private var yMinusAve = 0f
     private var zMinusAve = 0f
-    private var xyzMinusAve = 0f
+    private var xyzAve = 0f
+
+    private var xMax = 0f
+    private var yMax = 0f
+    private var zMax = 0f
     private var xMinusMax = 0f
     private var yMinusMax = 0f
     private var zMinusMax = 0f
-    private var xyzMinusMax = 0f
+    private var xyzMax = 0f
+
+    private var xCount = 0
+    private var yCount = 0
+    private var zCount = 0
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -74,33 +80,35 @@ class CountActivity : AppCompatActivity(), SensorEventListener {
 
         // Realmデータベース
         realm = Realm.getDefaultInstance()
+        realmData = realm.where()
 
         // センサー
         sensorManager = getSystemService(Context.SENSOR_SERVICE) as SensorManager
         sensor = sensorManager.getDefaultSensor(Sensor.TYPE_LINEAR_ACCELERATION)
 
+        // Intentから時刻を取得する
+        day = intent.getStringExtra("day") ?: ""
+
         // 現在時刻を取得する
         val current = SimpleDateFormat("yy-MM-dd")
         date = current.format(Date())
 
-        // Intentから時刻を取得する
-        val day = intent.getStringExtra("day")
+        // 今日の測定がある場合、カウントに代入する
+        if (day == date) {
+            val count = realmData.equalTo("day", day).findAll().firstOrNull()?.count ?: 0
+            this.count = count
+            findViewById<TextView>(R.id.count_text).text = this.count.toString()
 
-        // 既に今日のカウントがあるのであれば、そのカウントを格納する
-        if (day.equals(date)) {
-            val realmData = realm.where<RealmData>()
-                .equalTo("day", day).sort("date", Sort.DESCENDING).findFirst()
-            findViewById<TextView>(R.id.count_text).apply {
-//                text = realmData!!.count.toString()
-//                count = text.toString().toInt()
-                count = 0
-            }
             today = true
+            println("----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- -----")
+            println("日付の比較は出来ています。")
+            println("保存されている最新の日付(day) = $day : 今日の日付(date) = $date")
+            println("count = ${this.count} がセットされます。")
         }
 
-        // スタートボタンのON/OFF
-        findViewById<Button>(R.id.start_button).setOnClickListener {
-            var buttonText = findViewById<Button>(R.id.start_button)
+        // 計測のON/OFFを行うボタン ON=START OFF=STOP
+        val buttonText = findViewById<Button>(R.id.start_button)
+        buttonText.setOnClickListener {
             if (buttonText.text.equals(getString(R.string.text_start))) {
                 buttonText.text = getString(R.string.text_stop)
                 startButton = true
@@ -115,15 +123,14 @@ class CountActivity : AppCompatActivity(), SensorEventListener {
             when {
                 today -> {
                     realm.executeTransaction {
-                        val realmData = realm.where<RealmData>()
-                            .equalTo("day", day).sort("date", Sort.DESCENDING).findFirst()
-                        realmData?.count = count
-                        realmData?.date = Date()
+                        val realmNew = realmData.equalTo("day", day).findFirst()
+                        realmNew?.count = count
+                        realmNew?.date = Date()
                     }
                 }
                 !today -> {
                     realm.executeTransaction {
-                        val maxId = realm.where<RealmData>().max("id")
+                        val maxId = realmData.max("id")
                         val nextId = (maxId?.toInt() ?: 0) + 1
                         val realmData = realm.createObject<RealmData>(nextId)
 
@@ -136,30 +143,32 @@ class CountActivity : AppCompatActivity(), SensorEventListener {
             finish()
         }
 
-        findViewById<Button>(R.id.test).setOnClickListener {
-            var builder = StringBuilder()
-
-
-            builder.append("X_AVE = ${xAve} \n")
-            builder.append("Y_AVE = ${yAve} \n")
-            builder.append("Z_AVE = ${zAve} \n")
-            builder.append("XYZ_AVE = ${xyzAve} \n")
-            builder.append("X_MAX = ${xMax} \n")
-            builder.append("Y_MAX = ${yMax} \n")
-            builder.append("Z_MAX = ${zMax} \n")
-            builder.append("XYZ_MAX = ${xyzMax} \n\n")
-
-            builder.append("X_MINUS_AVE = ${xMinusAve} \n")
-            builder.append("Y_MINUS_AVE = ${yMinusAve} \n")
-            builder.append("Z_MINUS_AVE = ${zMinusAve} \n")
-//            builder.append("XYZ_MINUS_AVE = ${xyzMinusAve} \n")
-            builder.append("X_MINUS_MAX = ${xMinusMax} \n")
-            builder.append("Y_MINUS_MAX = ${yMinusMax} \n")
-            builder.append("Z_MINUS_MAX = ${zMinusMax} \n")
-//            builder.append("XYZ_MINUS_MAX = ${xyzMinusMax} \n\n")
-
-            findViewById<TextView>(R.id.count_text).text = builder
-        }
+//        findViewById<Button>(R.id.test).setOnClickListener {
+//            var builder = StringBuilder()
+//
+//            builder.append("X_AVE = $xAve \n")
+//            builder.append("Y_AVE = $yAve \n")
+//            builder.append("Z_AVE = $zAve \n")
+//            builder.append("X_MINUS_AVE = $xMinusAve \n")
+//            builder.append("Y_MINUS_AVE = $yMinusAve \n")
+//            builder.append("Z_MINUS_AVE = $zMinusAve \n")
+//            builder.append("XYZ_AVE = $xyzAve \n\n")
+//
+//            builder.append("X_MAX = $xMax \n")
+//            builder.append("Y_MAX = $yMax \n")
+//            builder.append("Z_MAX = $zMax \n")
+//            builder.append("X_MINUS_MAX = $xMinusMax \n")
+//            builder.append("Y_MINUS_MAX = $yMinusMax \n")
+//            builder.append("Z_MINUS_MAX = $zMinusMax \n")
+//            builder.append("XYZ_MAX = $xyzMax \n\n")
+//
+//            builder.append("X count = $xCount \n")
+//            builder.append("Y count = $yCount \n")
+//            builder.append("Z count = $zCount \n")
+//
+//
+//            findViewById<TextView>(R.id.count_text).text = builder
+//        }
     }
 
     override fun onSensorChanged(event: SensorEvent?) {
@@ -167,28 +176,10 @@ class CountActivity : AppCompatActivity(), SensorEventListener {
             System.arraycopy(event.values, 0, xyzArray, 0, xyzArray.size)
         }
 
-//        // カウントアルゴリズム
-//        if (startButton) {
-//            if (up) {
-//                if (xValue > 0.85) {
-//                    up = false
-//                }
-//            } else {
-//                if (xValue < -0.85) {
-//                    count++
-//                    up = true
-//                }
-//            }
-//
-//            findViewById<TextView>(R.id.count_text).text = count.toString()
-//        }
-
         x = xyzArray[0]
         y = xyzArray[1]
         z = xyzArray[2]
         xyz = sqrt(x.pow(2) + y.pow(2) + z.pow(2))
-
-        println("x=$x y=$y z=$z xyz=$xyz")
 
         if (startButton) {
             if (x > 0) xList.add(x) else xMinusList.add(x)
@@ -199,29 +190,29 @@ class CountActivity : AppCompatActivity(), SensorEventListener {
             xAve = xList.average().toFloat()
             yAve = yList.average().toFloat()
             zAve = zList.average().toFloat()
-            xyzAve = xyzList.average().toFloat()
-
             xMinusAve = xMinusList.average().toFloat()
             yMinusAve = yMinusList.average().toFloat()
             zMinusAve = zMinusList.average().toFloat()
-//            xyzMinusAve = xyzMinusList.average().toFloat()
+            xyzAve = xyzList.average().toFloat()
 
             xMax = xList.maxOrNull() ?: 0f
             yMax = yList.maxOrNull() ?: 0f
             zMax = zList.maxOrNull() ?: 0f
-            xyzMax = xyzList.maxOrNull() ?: 0f
-
             xMinusMax = xMinusList.minOrNull() ?: 0f
             yMinusMax = yMinusList.minOrNull() ?: 0f
             zMinusMax = zMinusList.minOrNull() ?: 0f
-//            xyzMinusMax = xyzMinusList.maxOrNull() ?: 0f
+            xyzMax = xyzList.maxOrNull() ?: 0f
+
+            if (x > 1.5 || x < -1.5) xCount++
+            if (y > 1.5 || y < -1.5) yCount++
+            if (z > 1.5 || z < -1.5) zCount++
 
             if (up) {
-                if (((x > 1.0) || (y > 1.0) || (z > 1.0)) && (xyz > 1.0)) {
+                if ((z > 1.0) && (xyz > 1.5)) {
                     up = false
                 }
             } else {
-                if (((x < -0.5) || (y < -0.5) || (z < -0.5)) && (xyz > 1.0)) {
+                if ((z < -1.0) && (xyz > 1.5)) {
                     count++
                     up = true
                 }
@@ -229,12 +220,11 @@ class CountActivity : AppCompatActivity(), SensorEventListener {
 
             findViewById<TextView>(R.id.count_text).text = count.toString()
         }
-        
+
+
     }
 
-    override fun onAccuracyChanged(sensor: Sensor?, accuracy: Int) {
-        // 使わない
-    }
+    override fun onAccuracyChanged(sensor: Sensor?, accuracy: Int) {}
 
     override fun onResume() {
         super.onResume()

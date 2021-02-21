@@ -8,7 +8,7 @@
     <string name="text_counting">スクワット中</string>
 
     <string name="text_count">0</string>
-    <string name="text_count_test">10 回</string>
+    <string name="text_count_test">0 回</string>
     <string name="text_start">START</string>
     <string name="text_stop">STOP</string>
     <string name="text_save">保存</string>
