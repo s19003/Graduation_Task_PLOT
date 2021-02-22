@@ -38,7 +38,7 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="24dp"
         android:text="測定開始"
-        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+        android:textSize="24sp"
         android:textStyle="bold"
         app:backgroundTint="#00BFA5"
         app:layout_constraintBottom_toTopOf="@+id/bottom_nav_view"
