@@ -145,6 +145,7 @@ class CountActivity : AppCompatActivity(), SensorEventListener {
                     }
                 }
             }
+
             finish()
         }
 

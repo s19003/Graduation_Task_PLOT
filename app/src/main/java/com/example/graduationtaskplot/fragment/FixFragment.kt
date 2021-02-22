@@ -44,7 +44,7 @@ class FixFragment : Fragment() {
 
         val realmResults = realm.where(RealmData::class.java)
             .findAll()
-            .sort("id", Sort.DESCENDING)
+            .sort("day", Sort.DESCENDING)
         layoutManager = LinearLayoutManager(this.context)
         recyclerView?.layoutManager = layoutManager
 
