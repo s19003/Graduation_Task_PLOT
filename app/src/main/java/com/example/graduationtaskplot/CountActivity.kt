@@ -115,9 +115,11 @@ class CountActivity : AppCompatActivity(), SensorEventListener {
             if (buttonText.text.equals(getString(R.string.text_start))) {
                 buttonText.text = getString(R.string.text_stop)
                 startButton = true
+                buttonText.setBackgroundColor(resources.getColor(R.color.purple_700))
             } else {
                 buttonText.text = getString(R.string.text_start)
                 startButton = false
+                buttonText.setBackgroundColor(resources.getColor(android.R.color.holo_orange_dark))
             }
         }
 

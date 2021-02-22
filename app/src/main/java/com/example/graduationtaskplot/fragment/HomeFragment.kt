@@ -1,12 +1,11 @@
 package com.example.graduationtaskplot.fragment
 
-import android.content.res.ColorStateList
-import android.graphics.Color
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.TextView
 import com.example.graduationtaskplot.R
 import com.example.graduationtaskplot.realm.RealmData
@@ -17,7 +16,6 @@ import com.github.mikephil.charting.data.BarDataSet
 import com.github.mikephil.charting.data.BarEntry
 import com.github.mikephil.charting.formatter.IndexAxisValueFormatter
 import com.github.mikephil.charting.interfaces.datasets.IBarDataSet
-import com.google.android.material.floatingactionbutton.FloatingActionButton
 import io.realm.Realm
 import io.realm.Sort
 import java.text.SimpleDateFormat
@@ -41,7 +39,7 @@ class HomeFragment : Fragment() {
         realm = Realm.getDefaultInstance()
 
         // カウントボタンを表示する
-        var button: FloatingActionButton? = activity?.findViewById(R.id.count_button)
+        var button: Button? = activity?.findViewById(R.id.count_button)
         button?.visibility = View.VISIBLE
     }
 
@@ -73,7 +71,8 @@ class HomeFragment : Fragment() {
             xAxis.position = XAxis.XAxisPosition.BOTTOM // ラベルを下に表示する
             xAxis.setDrawLabels(true) // ラベルをセットする
             xAxis.setDrawGridLines(false) // X軸のグリッド線を非表示にする
-            xAxis.setDrawAxisLine(true) //
+            xAxis.setDrawAxisLine(true) // X軸の数字をY軸に表示する
+            xAxis.labelCount = labels.size
 
             // Y軸(左)
             axisLeft.axisMaximum = 100f // 表示上限
@@ -109,6 +108,7 @@ class HomeFragment : Fragment() {
         if (date.equals(day?.day)) {
             activity?.findViewById<TextView>(R.id.text_today_count)?.apply {
                 text = String.format("${day?.count.toString()} 回")
+                setTextColor(resources.getColor(R.color.teal_700))
             }
         }
     }

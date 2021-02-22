@@ -3,17 +3,15 @@ package com.example.graduationtaskplot
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.widget.Button
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.example.graduationtaskplot.realm.RealmData
 import com.google.android.material.bottomnavigation.BottomNavigationView
-import com.google.android.material.floatingactionbutton.FloatingActionButton
 import io.realm.Realm
 import io.realm.Sort
-import java.text.SimpleDateFormat
-import java.util.*
 
 class MainActivity : AppCompatActivity() {
     // Realmデータベース
@@ -43,7 +41,7 @@ class MainActivity : AppCompatActivity() {
         // Realmデータベース
         realm = Realm.getDefaultInstance()
 
-        findViewById<FloatingActionButton>(R.id.count_button)?.setOnClickListener {
+        findViewById<Button>(R.id.count_button)?.setOnClickListener {
             val intent = Intent(this, CountActivity::class.java)
 
             // 比較用の時刻を取得

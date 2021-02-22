@@ -4,13 +4,13 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.graduationtaskplot.R
 import com.example.graduationtaskplot.realm.RealmData
 import com.example.graduationtaskplot.recyclerView.ViewAdapter
-import com.google.android.material.floatingactionbutton.FloatingActionButton
 import io.realm.Realm
 import io.realm.Sort
 
@@ -36,7 +36,7 @@ class FixFragment : Fragment() {
         super.onActivityCreated(savedInstanceState)
 
         // カウントボタンを非表示にする
-        var button: FloatingActionButton? = activity?.findViewById(R.id.count_button)
+        var button: Button? = activity?.findViewById(R.id.count_button)
         button?.visibility = View.INVISIBLE
 
         // RecyclerViewの連携を指定する
