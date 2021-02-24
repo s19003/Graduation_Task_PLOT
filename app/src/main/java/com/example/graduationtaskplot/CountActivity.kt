@@ -40,7 +40,7 @@ class CountActivity : AppCompatActivity(), SensorEventListener {
     private var day = ""
     private var date = ""
     private var up = true
-    private var startButton = false
+    private var startButton = true
     private var today = false
 
     // テスト用

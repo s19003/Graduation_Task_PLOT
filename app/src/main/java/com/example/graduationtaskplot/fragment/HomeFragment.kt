@@ -72,7 +72,6 @@ class HomeFragment : Fragment() {
             xAxis.setDrawLabels(true) // ラベルをセットする
             xAxis.setDrawGridLines(false) // X軸のグリッド線を非表示にする
             xAxis.setDrawAxisLine(true) // X軸の数字をY軸に表示する
-            xAxis.labelCount = labels.size
 
             // Y軸(左)
             axisLeft.axisMaximum = 100f // 表示上限
