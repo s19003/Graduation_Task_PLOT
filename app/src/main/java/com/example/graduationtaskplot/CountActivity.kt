@@ -216,11 +216,11 @@ class CountActivity : AppCompatActivity(), SensorEventListener {
 //            if (z > 1.5 || z < -1.5) zCount++
 
             if (up) {
-                if ((z > 1.0) && (xyz > 1.5) && (lightValue < 30f)) {
+                if ((z > 1.0) && (xyz > 1.5) && (lightValue < 22f)) {
                     up = false
                 }
             } else {
-                if ((z < -1.0) && (xyz > 1.5) && (lightValue < 30f)) {
+                if ((z < -1.0) && (xyz > 1.5) && (lightValue < 22f)) {
                     count++
                     up = true
                 }
