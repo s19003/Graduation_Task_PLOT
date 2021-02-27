@@ -226,6 +226,8 @@ class CountActivity : AppCompatActivity(), SensorEventListener {
                 }
             }
 
+//            val hoge = if (count < 4) 0 else 5
+
             findViewById<TextView>(R.id.count_text).text = count.toString()
         }
 
